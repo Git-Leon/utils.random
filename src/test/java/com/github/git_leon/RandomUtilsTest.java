@@ -119,8 +119,8 @@ public class RandomUtilsTest {
         // Given
         long seed = System.currentTimeMillis();
 
-        Date minDate = new Date(seed);
-        Date maxDate = new Date(seed / 2);
+        Date minDate = new Date(seed / 2);
+        Date maxDate = new Date(seed);
         Date dateDelta = new Date(maxDate.getTime() - minDate.getTime());
 
         for (int i = 0; i < dateDelta.getYear(); i++) {
