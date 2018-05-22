@@ -103,7 +103,7 @@ public class RandomUtilsTest {
         Integer numberOfIterations = charDelta * stringLength;
         for (int i = 0; i < numberOfIterations; i++) {
             // create a random string
-            String randomString = RandomUtils.createString('a', 'z', 15);
+            String randomString = RandomUtils.createString(min, max, 15);
 
             // check each character of string
             for (char character : randomString.toCharArray()) {
