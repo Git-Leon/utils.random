@@ -3,7 +3,9 @@ package com.github.git_leon;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author leon on 5/22/18.
@@ -130,6 +132,41 @@ public class RandomUtilsTest {
 
             // Then
             Assert.assertTrue(outcome);
+        }
+    }
+
+    @Test
+    public void selectElementListTest() {
+        // Given
+        String[] array = {"The", "Quick", "Brown", "Fox", "Jumps", "Over"};
+        List<String> list = Arrays.asList(array);
+        double numberOfIterations = Math.pow(array.length, array.length);
+        for (int i = 0; i < numberOfIterations; i++) {
+
+            // When
+            String value = RandomUtils.selectElement(list);
+            boolean isValidValue = list.contains(value);
+
+            // Then
+            Assert.assertTrue(isValidValue);
+        }
+    }
+
+
+    @Test
+    public void selectElementArrayTest() {
+        // Given
+        String[] array = {"The", "Quick", "Brown", "Fox", "Jumps", "Over"};
+        List<String> list = Arrays.asList(array);
+        double numberOfIterations = Math.pow(array.length, array.length);
+        for (int i = 0; i < numberOfIterations; i++) {
+
+            // When
+            String value = RandomUtils.selectElement(array);
+            boolean isValidValue = list.contains(value);
+
+            // Then
+            Assert.assertTrue(isValidValue);
         }
     }
 }

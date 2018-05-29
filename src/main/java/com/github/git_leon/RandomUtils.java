@@ -5,7 +5,9 @@ package com.github.git_leon;
  */
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -18,9 +20,9 @@ public final class RandomUtils {
     }
 
     /**
-     * @param maxRed maximum saturation of red; 255 max
+     * @param maxRed   maximum saturation of red; 255 max
      * @param maxGreen maximum saturation of green; 255 max
-     * @param maxBlue maximum saturation of blue; 255 max
+     * @param maxBlue  maximum saturation of blue; 255 max
      * @return a random color within the specified RGB range
      */
     public static Color createColor(int maxRed, int maxGreen, int maxBlue) {
@@ -84,8 +86,8 @@ public final class RandomUtils {
     }
 
     /**
-     * @param min minimum character to be generated in string
-     * @param max maximum character value to be generated in string
+     * @param min    minimum character to be generated in string
+     * @param max    maximum character value to be generated in string
      * @param length length of string
      * @return a random string of the specified length containing characters in the specified range
      */
@@ -98,12 +100,23 @@ public final class RandomUtils {
     }
 
     /**
-     * @param array an array to select a random element from
+     * @param array     an array to select a random element from
      * @param <AnyType> any type
      * @return a randomly selected element from the specified array
      */
     public static <AnyType> AnyType selectElement(AnyType[] array) {
-        return array[createInteger(0, array.length - 1)];
+        return selectElement(Arrays.asList(array));
+    }
+
+    /**
+     * @param list      an array to select a random element from
+     * @param <AnyType> any type
+     * @return a randomly selected element from the specified array
+     */
+    public static <AnyType> AnyType selectElement(List<AnyType> list) {
+        Integer randomIndex = createInteger(0, list.size() - 1);
+        AnyType randomElement = list.get(randomIndex);
+        return randomElement;
     }
 
     /**
@@ -112,8 +125,8 @@ public final class RandomUtils {
      * @return a random Date value within the specified min and max year
      */
     public static Date createDate(int minYear, int maxYear) {
-        Date minDate = new Date(minYear, 1,1);
-        Date maxDate = new Date(maxYear, 1,1);
+        Date minDate = new Date(minYear, 1, 1);
+        Date maxDate = new Date(maxYear, 1, 1);
         return createDate(minDate, maxDate);
     }
 
