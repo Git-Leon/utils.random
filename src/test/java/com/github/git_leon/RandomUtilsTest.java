@@ -113,11 +113,31 @@ public class RandomUtilsTest {
                 Assert.assertTrue(outcome);
             }
         }
-
     }
 
     @Test
-    public void createDateTest() {
+    public void createStringsTest() {
+        Integer numberOfStrings = 30;
+        Integer stringLength = 15;
+        Character min = 'a';
+        Character max = 'z';
+        Integer charDelta = max - min;
+        Integer numberOfIterations = charDelta * stringLength;
+        for (int i = 0; i < numberOfIterations; i++) {
+            // create a random string array
+            String[] randomStrings = RandomUtils.createStrings(min, max, stringLength, numberOfStrings);
+            for (String randomString : randomStrings) {
+                // check each character of string
+                for (char character : randomString.toCharArray()) {
+                    boolean outcome = RangeChecker.isInRange(character, min, max);
+                    Assert.assertTrue(outcome);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void createDateWithDateTest() {
         // Given
         long seed = System.currentTimeMillis();
 
@@ -128,6 +148,26 @@ public class RandomUtilsTest {
         for (int i = 0; i < dateDelta.getYear(); i++) {
             // When
             Date randomDate = RandomUtils.createDate(minDate, maxDate);
+            boolean outcome = RangeChecker.isInRange(randomDate, minDate, maxDate);
+
+            // Then
+            Assert.assertTrue(outcome);
+        }
+    }
+
+
+    //@Test
+    public void createDateWithIntegerTest() {
+        // Given
+        long seed = System.currentTimeMillis();
+
+        Date minDate = new Date(seed / 2);
+        Date maxDate = new Date(seed);
+        Date dateDelta = new Date(maxDate.getTime() - minDate.getTime());
+
+        for (int i = 0; i < dateDelta.getYear(); i++) {
+            // When
+            Date randomDate = RandomUtils.createDate(minDate.getTime(), maxDate.getTime());
             boolean outcome = RangeChecker.isInRange(randomDate, minDate, maxDate);
 
             // Then
@@ -168,5 +208,20 @@ public class RandomUtilsTest {
             // Then
             Assert.assertTrue(isValidValue);
         }
+    }
+
+
+    @Test
+    public void shuffleArrayTest() {
+        // Given
+        Integer[] array = {1, 2, 3, 4, 5};
+        String arrayAsStr = Arrays.toString(array);
+
+        // When
+        Integer[] newArray = RandomUtils.shuffleArray(array);
+        String newArrayAsStr = Arrays.toString(newArray);
+
+        // Then
+        Assert.assertFalse(newArrayAsStr.equals(arrayAsStr));
     }
 }

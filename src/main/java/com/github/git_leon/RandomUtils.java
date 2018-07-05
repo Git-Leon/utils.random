@@ -1,102 +1,86 @@
 package com.github.git_leon;
 
-/**
- * Created by leon on 8/17/17.
- */
-
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 /**
- * @author leon.hunter
+ * Created by Leon on 2/4/2017.
  */
 public final class RandomUtils {
     private static volatile Random random = new Random();
 
     private RandomUtils() {
+        /** This class is uninstantiable */
     }
 
-    /**
-     * @param maxRed   maximum saturation of red; 255 max
-     * @param maxGreen maximum saturation of green; 255 max
-     * @param maxBlue  maximum saturation of blue; 255 max
-     * @return a random color within the specified RGB range
-     */
-    public static Color createColor(int maxRed, int maxGreen, int maxBlue) {
-        int red = createInteger(0, maxRed);
-        int green = createInteger(0, maxGreen);
-        int blue = createInteger(0, maxBlue);
-        return new Color(red, green, blue);
-    }
-
-    /**
-     * @param percentage likelihood of returning true
-     * @return true or false
-     */
+    /** @return true with the likelihood of specified percentage */
     public static boolean createBoolean(float percentage) {
-        return percentage > createFloat(0, 100);
+        return percentage > createDouble(0, 100);
     }
 
-    /**
-     * @param min minimum ascii value
-     * @param max maximum ascii value
-     * @return a random character between the specified min and max character range
-     */
+    /** @return a random character between the specified min and max character range */
     public static Character createCharacter(char min, char max) {
         return (char) createInteger((int) min, (int) max).intValue();
     }
 
-    /**
-     * @param min minimum double value
-     * @param max maximum double value
-     * @return a random double between the specified minimum and maximum numeric range
-     */
-    public static Double createDouble(Double min, Double max) {
-        return createFloat(min.floatValue(), max.floatValue()).doubleValue();
+    /** @return a random double between the specified min and max numeric range */
+    public static Float createFloat(float min, float max) {
+        return createDouble(min, max).floatValue();
     }
 
-    /**
-     * @param min minimum float value
-     * @param max maximum float value
-     * @return a random float between the specified minimum and maximum numeric range
-     */
-    public static synchronized Float createFloat(float min, float max) {
-        return random.nextFloat() * (max - min) + min;
+    /** @return a random float between the specified min and max numeric range */
+    public static Double createDouble(double min, double max) {
+        return random.nextDouble() * (max - min) + min;
     }
 
-    /**
-     * @param min minimum integer value
-     * @param max maximum integer value
-     * @return a random integer between the specified minimum and maximum numeric range
-     */
-    public static Integer createInteger(Integer min, Integer max) {
-        return createFloat(min, max).intValue();
+    /** @return a random integer between the specified min and max numeric range */
+    public static Integer createInteger(int min, int max) {
+        return createDouble(min, max).intValue();
     }
 
-    /**
-     * @param min minimum long value
-     * @param max maximum long value
-     * @return a random long between the specified minimum and maximum numeric range
-     */
-    public static Long createLong(Long min, Long max) {
-        return createFloat(min, max).longValue();
+    /** @return a random long between the specified min and max numeric range */
+    public static Long createLong(long min, long max) {
+        return createDouble(min, max).longValue();
     }
 
-    /**
-     * @param min    minimum character to be generated in string
-     * @param max    maximum character value to be generated in string
-     * @param length length of string
-     * @return a random string of the specified length containing characters in the specified range
-     */
-    public static String createString(char min, char max, int length) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
+    /** @return a random string of the specified length containing characters in the specified range */
+    public static String createString(char min, char max, int stringLength) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < stringLength; i++) {
             sb.append(createCharacter(min, max));
         }
         return sb.toString();
+    }
+
+    /** @return an array of random string objects of the specified length containing characters in the specified range */
+    public static String[] createStrings(char min, char max, int stringLength, int stringCount) {
+        String[] strings = new String[stringCount];
+        for(int i=0;i<strings.length;i++) {
+            strings[i] = createString(min,max,stringLength);
+        }
+        return strings;
+    }
+
+    /**
+     * @param minYear minimum year-value to be generated
+     * @param maxYear maximum year-value to be generated
+     * @return a random Date value within the specified min and max year
+     */
+    public static Date createDate(Number minYear, Number maxYear) {
+        assert minYear.doubleValue() < maxYear.doubleValue();
+        Date minDate = new Date(minYear.intValue(), 1, 1);
+        Date maxDate = new Date(maxYear.intValue(), 1, 1);
+        return createDate(minDate, maxDate);
+    }
+
+    /**
+     * @param minDate minimum Date to be returned
+     * @param maxDate minimum Date to be returned
+     * @return random date between the specified `minDate` and `maxDate`
+     */
+    public static Date createDate(Date minDate, Date maxDate) {
+        return new Date(createLong(minDate.getTime(), maxDate.getTime()));
     }
 
     /**
@@ -119,24 +103,30 @@ public final class RandomUtils {
         return randomElement;
     }
 
-    /**
-     * @param minYear minimum year-value to be generated
-     * @param maxYear maximum year-value to be generated
-     * @return a random Date value within the specified min and max year
-     */
-    public static Date createDate(int minYear, int maxYear) {
-        Date minDate = new Date(minYear, 1, 1);
-        Date maxDate = new Date(maxYear, 1, 1);
-        return createDate(minDate, maxDate);
+    /** @return specified string value with random upper and lower casing assigned to each character */
+    public static String shuffleCasing(String str) {
+        StringBuffer sb = new StringBuffer();
+        for (String s : str.toLowerCase().split("")) {
+            sb.append(createBoolean(50) ? s.toUpperCase() : s.toLowerCase());
+        }
+        return sb.toString();
     }
 
-    /**
-     * @param minDate minimum Date to be returned
-     * @param maxDate minimum Date to be returned
-     * @return random date between the specified `minDate` and `maxDate`
-     */
-    public static Date createDate(Date minDate, Date maxDate) {
-        long randomTimeInSpecifiedRange = createLong(minDate.getTime(), maxDate.getTime());
-        return new Date(randomTimeInSpecifiedRange);
+    /** @return shuffles the specified string array */
+    public static <AnyType> AnyType[] shuffleArray(AnyType[] array) {
+        ArrayList<AnyType> list = new ArrayList<>(Arrays.asList(array));
+        Collections.shuffle(list);
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
+
+    /** @return a random color with the specified maximum rgb values */
+    public static Color createColor(int maxRed, int maxGreen, int maxBlue) {
+        int red = createInteger(0, maxRed);
+        int green = createInteger(0, maxGreen);
+        int blue = createInteger(0, maxBlue);
+        return new Color(red, green, blue);
     }
 }
