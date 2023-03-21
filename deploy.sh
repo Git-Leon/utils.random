@@ -2,17 +2,23 @@ rm -rf target
 rm dependency-reduced-pom.xml
 ls
 
-port_number=$1
+echo Fetching any potential remote changes...
+git fetch --all
+git pull --all
+
 if ! [[ -f "./mvnw" ]]; then
-  echo "The './mvnw' file does not exist. Running 'mvn -N wrapper:wrapper'..."
+  echo "The file, ``./mvnw``, does not exist."
+  echo "Running ``mvn -N wrapper:wrapper`` to generate ``./mvnw``..."
   mvn -N wrapper:wrapper
 fi
 
+echo Fetching project metadata...
 project_version=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
 project_name=`./mvnw help:evaluate -Dexpression=project.name -q -DforceStdout`
 project_groupId=`./mvnw help:evaluate -Dexpression=project.groupId -q -DforceStdout`
 project_artifactId=`./mvnw help:evaluate -Dexpression=project.artifactId -q -DforceStdout`
 project_version=`./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout`
+project_build_directory=`mvn help:evaluate -Dexpression=project.build.directory`
 package_cloud_username=""
 package_cloud_packagename=""
 read -p "Enter PackageCloud username: " package_cloud_username
